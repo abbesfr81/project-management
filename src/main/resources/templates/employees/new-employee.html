@@ -2,12 +2,13 @@
 
 <html xmlns:th="http://www.thymeleaf.org">
 
-<head></head>
+<head th:replace="layouts :: header"> 
+	</head>
 
 <body>
 
 
-	
+	<nav th:replace="layouts :: navbar" />
 	<div class="container">
 		<form action="/employees/save" th:object="${employee}" method="POST">
 		
@@ -19,7 +20,7 @@
 		<button type="submit">Create employee</button>
 		
 		
-	<button type="submit">Create Project</button>
+
 	</form>
 	</div>
 

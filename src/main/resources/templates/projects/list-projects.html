@@ -1,17 +1,23 @@
+<!DOCTYPE html>
+
 <html xmlns:th="http://www.thymeleaf.org">
 
-	<head> 
+	<head th:replace="layouts :: head"> 
 	</head>
 	
 	<body>
 	
-
+	<nav th:replace="layouts :: navbar"></nav>
 
 		<div class="container">
-			<h4>Current projects</h4>
-		
+			<h3>Projects Directory</h3>
+			<hr>
 			
-
+			<!--  Add New Project Button -->
+			<a th:href="@{/projects/new}"
+				class="btn btn-primary btn-sm mb-3"> 
+				New Project 
+			</a>
 			<table class="table table-bordered table-striped">
 				<thead class="thead-dark">
 					<tr>

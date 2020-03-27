@@ -4,6 +4,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 
 import lombok.AccessLevel;
 import lombok.EqualsAndHashCode;
@@ -30,11 +32,17 @@ public class Employee {
 	String lastName;
 	String email;
 	
+	@ManyToOne
+	@JoinColumn(name = "project_id")
+	Project theProject;
+	
 	public Employee(String firstName, String lastName, String email) {
+		
 		super();
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.email = email;
+	
 	}
 	
 	

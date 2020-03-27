@@ -2,11 +2,12 @@
 
 <html xmlns:th="http://www.thymeleaf.org">
 
-<head></head>
+<head th:replace="layouts :: header"> 
+	</head>
 
 <body>
 
-
+<nav th:replace="layouts :: navbar" />
 	
 	<div class="container">
 		<form action="/projects/save" th:object="${project}" method="POST">
