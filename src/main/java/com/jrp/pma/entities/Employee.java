@@ -1,10 +1,16 @@
 package com.jrp.pma.entities;
 
+import java.util.List;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 
 import lombok.AccessLevel;
@@ -25,16 +31,18 @@ import lombok.experimental.FieldDefaults;
 public class Employee {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator="employee_seq")
 	long employeeId;
 	
 	String firstName;
 	String lastName;
 	String email;
 	
-	@ManyToOne
-	@JoinColumn(name = "project_id")
-	Project theProject;
+	@ManyToMany(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.PERSIST},
+			fetch = FetchType.LAZY)
+	@JoinTable(name="project_employee", 
+	joinColumns=@JoinColumn(name="employee_id"), inverseJoinColumns = @JoinColumn(name="project_id"))
+	List<Project> projects;
 	
 	public Employee(String firstName, String lastName, String email) {
 		
