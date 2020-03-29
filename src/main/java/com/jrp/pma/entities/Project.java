@@ -12,50 +12,81 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
+import javax.persistence.SequenceGenerator;
 
-import lombok.AccessLevel;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
-import lombok.experimental.FieldDefaults;
-
-
-
-@Getter
-@Setter
 @Entity
-@NoArgsConstructor
-@FieldDefaults(level=AccessLevel.PRIVATE)
-@EqualsAndHashCode(of= {"projectId","name"})
-@ToString(of = {"projectId","name","stage","description"})
 public class Project {
-
-	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator="project_seq")
-	long projectId;
 	
-	String name;
-	String stage;
-	String description;
+	@Id
+	@SequenceGenerator(name="project_seq", sequenceName = "project_seq", allocationSize=1) 
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator="project_seq")
+	private long projectId;
+	
+	private String name;
+	
+	private String stage; // NOTSTARTED, COMPLETED, INPROGRESS
+	
+	private String description;
 	
 	@ManyToMany(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.PERSIST},
-			fetch = FetchType.LAZY)
-	@JoinTable(name="project_employee", 
-	joinColumns=@JoinColumn(name="project_id"), inverseJoinColumns = @JoinColumn(name="employee_id"))	
-	List<Employee> employees; 
+			   fetch = FetchType.LAZY)
+	@JoinTable(name="project_employee",
+				joinColumns=@JoinColumn(name="project_id"), 
+				inverseJoinColumns= @JoinColumn(name="employee_id")
+	)
+	private List<Employee> employees;
 	
+	public Project() {
+		
+	}
+
+	public List<Employee> getEmployees() {
+		return employees;
+	}
+
+	public void setEmployees(List<Employee> employees) {
+		this.employees = employees;
+	}
+
 	public Project(String name, String stage, String description) {
 		super();
-		
 		this.name = name;
 		this.stage = stage;
 		this.description = description;
 	}
-	 
+
+	public long getProjectId() {
+		return projectId;
+	}
+
+	public void setProjectId(long projectId) {
+		this.projectId = projectId;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public String getStage() {
+		return stage;
+	}
+
+	public void setStage(String stage) {
+		this.stage = stage;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+	
 	// convenience method:
 	public void addEmployee(Employee emp) {
 		if(employees==null) {
@@ -63,5 +94,5 @@ public class Project {
 		}
 		employees.add(emp);
 	}
-	 
+	
 }
