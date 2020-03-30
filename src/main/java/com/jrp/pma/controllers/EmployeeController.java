@@ -9,37 +9,40 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.jrp.pma.dao.EmployeeRepository;
 import com.jrp.pma.entities.Employee;
+import com.jrp.pma.services.EmployeeService;
 
 @Controller
 @RequestMapping("/employees")
 public class EmployeeController {
-
+	
 	@Autowired
-	EmployeeRepository employeeRepository;
-	
-	
+	EmployeeService empService;
+
+
 	@GetMapping
 	public String displayEmployees(Model model) {
-		List<Employee> employees = employeeRepository.findAll();
+		List<Employee> employees = empService.getAll();
 		model.addAttribute("employees", employees);
 		return "employees/list-employees";
 	}
 	
 	@GetMapping("/new")
-	public String displayProjectFomr(Model model) {
+	public String displayEmployeeForm(Model model) {
 		
 		Employee anEmployee = new Employee();
-		model.addAttribute("employee",anEmployee);
+		
+		model.addAttribute("employee", anEmployee);
+		
 		return "employees/new-employee";
 	}
 	
-	
 	@PostMapping("/save")
-	public String createEmployee(Employee employee , Model model) {
+	public String createEmployee(Model model, Employee employee) {
+		// save to the database using an employee crud repository
+		empService.save(employee);
 		
-		employeeRepository.save(employee);
 		return "redirect:/employees/new";
 	}
+	
 }

@@ -10,11 +10,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.jrp.pma.dao.EmployeeRepository;
-import com.jrp.pma.dao.ProjectRepository;
 import com.jrp.pma.dto.ChartData;
 import com.jrp.pma.dto.EmployeeProject;
 import com.jrp.pma.entities.Project;
+import com.jrp.pma.services.EmployeeService;
+import com.jrp.pma.services.ProjectService;
 
 @Controller
 public class HomeController {
@@ -23,21 +23,22 @@ public class HomeController {
 	private String ver;
 	
 	@Autowired
-	ProjectRepository projectRepository;
+	ProjectService proService;
 	
 	@Autowired
-	EmployeeRepository employeeRepository;
-	
+	EmployeeService empService;
+
+
 	@GetMapping("/")
-	public String displayHome(Model model)  throws JsonProcessingException {
+	public String displayHome(Model model) throws JsonProcessingException {
 		
-model.addAttribute("versionNumber", ver);
+		model.addAttribute("versionNumber", ver);
 		
 		// we are querying the database for projects
-		List<Project> projects = projectRepository.findAll();
+		List<Project> projects = proService.getAll();
 		model.addAttribute("projectsList", projects);
 		
-		List<ChartData> projectData = projectRepository.getProjectStatus();
+		List<ChartData> projectData = proService.getProjectStatus();
 		
 		// Lets convert projectData object into a json structure for use in javascript
 		ObjectMapper objectMapper = new ObjectMapper();
@@ -47,13 +48,11 @@ model.addAttribute("versionNumber", ver);
 		model.addAttribute("projectStatusCnt", jsonString);
 		
 		// we are querying the database for employees
-		List<EmployeeProject> employeesProjectCnt = employeeRepository.employeeProjects();
+		List<EmployeeProject> employeesProjectCnt = empService.employeeProjects();
 		model.addAttribute("employeesListProjectsCnt", employeesProjectCnt);
 		
 		
 		return "main/home";
+		
 	}
-	
-	
-	
 }
